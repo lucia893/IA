@@ -21,7 +21,8 @@ def train(agent,
           env,
           episodes: int = 800,
           seed: int = 42,
-          render: bool = False) -> Dict[str, np.ndarray]:
+          render: bool = False,
+          wandb_run=None) -> Dict[str, np.ndarray]:
     """
     Entrena un agente tabular (QL o StochQL) en el env dado.
     Devuelve dict con recompensas por episodio y media móvil.
@@ -41,10 +42,22 @@ def train(agent,
             total += r
         agent.decay_epsilon()
         rewards.append(total)
+
+        # 👇 logging episodio a episodio
+        if wandb_run is not None:
+            ma50 = float(np.mean(rewards[-50:]))  # media móvil sobre los últimos 50
+            wandb_run.log({
+                "episode": ep,
+                "reward": total,
+                "ma50": ma50,
+                "epsilon": getattr(agent, "eps", None),
+            })
+
     return {
         "rewards": np.array(rewards, dtype=float),
         "ma": moving_avg(rewards, 50)
     }
+
 
 @dataclass
 class GSConfig:
