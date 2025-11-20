@@ -1,4 +1,3 @@
-# main.py
 import argparse
 import pickle
 import time
@@ -6,7 +5,6 @@ import os
 from collections import defaultdict
 import numpy as np
 
-# imports de tus módulos
 from src.env import make_env
 from src.discretizers import DiscretizerUniform, DiscretizerHeuristic
 from src.agents import QLearningAgent, StochasticQLearningAgent

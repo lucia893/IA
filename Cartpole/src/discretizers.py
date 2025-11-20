@@ -1,6 +1,17 @@
-# src/mbd/discretizers.py
 import numpy as np
 from .env import RANGES, clip_obs
+
+# discretizar implica definir un intervalo de valores para cada feature (el mismo que ya existe, continuo; es decir, el rango en el que se puede mover el 
+# carro va a ser el mismo que este) y dentro de ese intervalo que deifnimmos, hacemos "cortes" que dividen ese intervalo en "bins" (sub-intervalos).
+# ahora las prgeuntas son, ¿cuántos bins por feature? y qué determina esa elección?
+
+# En RL, el estado es toda la información que describe la situación actual del entorno.
+# En CartPole, el estado es un vector con 4 features (variables):
+# x → posición del carrito
+# ẋ (xdot) → velocidad del carrito
+# θ (theta) → ángulo del palo
+# θ̇ (thetadot) → velocidad angular del palo
+# Son las características del sistema físico que el algoritmo necesita para tomar decisiones.
 
 class DiscretizerUniform:
     """
