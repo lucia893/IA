@@ -1,0 +1,40 @@
+program: run_with_poetry.py
+method: bayes # podés usar "grid" si querés 100% determinista
+
+metric:
+  name: final_ma50 # qué métrica queremos maximizar
+  goal: maximize
+
+parameters:
+  agent:
+    values: ["ql"] # si después querés probar "sql", lo agregás acá
+
+  disc:
+    values: ["uniform", "heur", "data"]
+
+  alpha:
+    values: [0.05, 0.1, 0.2]
+
+  gamma:
+    values: [0.95, 0.98, 0.99]
+
+  eps_start:
+    value: 1.0
+
+  eps_end:
+    values: [0.02, 0.05]
+
+  eps_decay:
+    values: [0.99, 0.995]
+
+  k_subset:
+    value: 1 # solo para SQL; acá no importa
+
+  episodes:
+    value: 800
+
+  seed:
+    value: 42
+
+  disc_data_episodes:
+    value: 50

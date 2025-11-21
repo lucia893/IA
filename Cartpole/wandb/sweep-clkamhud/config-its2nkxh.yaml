@@ -1,0 +1,24 @@
+wandb_version: 1
+
+agent:
+  value: ql
+alpha:
+  value: 0.05
+disc:
+  value: uniform
+disc_data_episodes:
+  value: 50
+episodes:
+  value: 800
+eps_decay:
+  value: 0.995
+eps_end:
+  value: 0.02
+eps_start:
+  value: 1
+gamma:
+  value: 0.99
+k_subset:
+  value: 1
+seed:
+  value: 42
