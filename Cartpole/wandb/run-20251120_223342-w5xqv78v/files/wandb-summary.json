@@ -1,0 +1,1 @@
+{"train_time_s":4.781052112579346,"episode":799,"reward":22,"eval_mean":35.1,"eval_std":28.644196619908893,"_wandb":{"runtime":5},"_timestamp":1.7636888344215293e+09,"_runtime":5,"ma50":37.46,"_step":800,"final_reward":22,"final_ma50":37.46}

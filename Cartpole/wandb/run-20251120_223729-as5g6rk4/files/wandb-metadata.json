@@ -1,0 +1,39 @@
+{
+  "os": "Windows-10-10.0.26100-SP0",
+  "python": "CPython 3.10.11",
+  "startedAt": "2025-11-21T01:37:29.516716Z",
+  "args": [
+    "--agent=ql",
+    "--alpha=0.1",
+    "--disc=uniform",
+    "--disc_data_episodes=50",
+    "--episodes=800",
+    "--eps_decay=0.995",
+    "--eps_end=0.02",
+    "--eps_start=1",
+    "--gamma=0.99",
+    "--k_subset=1",
+    "--seed=42"
+  ],
+  "program": "-m src.sweep_run",
+  "git": {
+    "remote": "https://github.com/lucia893/IA.git",
+    "commit": "605c49e5cba0177c4fcdd1bc92b62d0b7ab58ef3"
+  },
+  "email": "lupereyra699@gmail.com",
+  "root": "C:\\Users\\59899\\Documents\\Universidad\\7mosemestre\\IA\\IA\\Cartpole",
+  "host": "Lucia",
+  "executable": "C:\\Users\\59899\\Documents\\Universidad\\7mosemestre\\IA\\IA\\cartpole\\.venv\\Scripts\\python.exe",
+  "cpu_count": 6,
+  "cpu_count_logical": 12,
+  "disk": {
+    "/": {
+      "total": "510455517184",
+      "used": "351857401856"
+    }
+  },
+  "memory": {
+    "total": "16558346240"
+  },
+  "writerId": "uaa0v7owre20nxwgb85tej1gv2f6j7ky"
+}

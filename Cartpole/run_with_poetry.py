@@ -1,7 +1,6 @@
-# run_with_poetry.py
-import os
 import subprocess
 import sys
 
-cmd = ["poetry", "run", "python"] + sys.argv[1:]
-subprocess.run(cmd)
+# Ejecuta: poetry run python -m src.sweep_run <args_que_manda_wandb>
+cmd = ["poetry", "run", "python", "-m", "src.sweep_run"] + sys.argv[1:]
+subprocess.run(cmd, check=True)

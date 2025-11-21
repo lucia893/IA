@@ -59,9 +59,9 @@ def build_agent_from_cfg(cfg, env, discretizer):
 
 
 def main():
-    # Valores por defecto; el sweep pisa lo que corresponda
+    # defaults, el sweep pisa lo que haga falta
     run = wandb.init(
-        project="IA-Cartpole",   # el mismo nombre que ves en W&B
+        project="IA-Cartpole",
         config={
             "agent": "ql",
             "disc": "uniform",
@@ -89,14 +89,14 @@ def main():
         episodes=cfg.episodes,
         seed=cfg.seed,
         render=False,
-        wandb_run=None,   # no dependemos de esto
+        wandb_run=None,  # no dependemos de esto
     )
     dt = time.time() - t0
 
     rewards = out["rewards"]
     ma = out["ma"]
 
-    # 🔹 Loguear toda la curva episodio por episodio
+    # Log episodio por episodio
     for ep, (r, m) in enumerate(zip(rewards, ma)):
         wandb.log({
             "episode": ep,
@@ -104,7 +104,7 @@ def main():
             "ma50": float(m),
         })
 
-    # 🔹 Evaluación greedy y métricas resumen
+    # Evaluación greedy y resumen
     mu, sd, _ = evaluate(agent, env, episodes=20, seed=cfg.seed + 1234)
 
     wandb.log({
@@ -117,7 +117,6 @@ def main():
 
     env.close()
     run.finish()
-
 
 
 if __name__ == "__main__":
