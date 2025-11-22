@@ -61,3 +61,64 @@ class StochasticQLearningAgent(QLearningAgent):
             idx = np.random.choice(self.n_actions, size=self.k_subset, replace=False)
             target = r + self.gamma * np.max(self.Q[s_next][idx])
         self.Q[s][a] += self.alpha * (target - self.Q[s][a])
+
+
+class DoubleQLearningAgent:
+    def __init__(
+        self,
+        n_actions: int,
+        discretizer,
+        alpha: float,
+        gamma: float,
+        epsilon_start: float,
+        epsilon_end: float,
+        epsilon_decay: float,
+    ):
+        self.n_actions = n_actions
+        self.discretizer = discretizer
+        self.alpha = alpha
+        self.gamma = gamma
+        self.eps = epsilon_start
+        self.eps_end = epsilon_end
+        self.eps_decay = epsilon_decay
+
+        # Dos tablas Q independientes
+        self.Q1 = defaultdict(lambda: np.zeros(n_actions, dtype=np.float32))
+        self.Q2 = defaultdict(lambda: np.zeros(n_actions, dtype=np.float32))
+
+        # Para compatibilidad con código que espera .Q (por ejemplo main.py)
+        self.Q = self.Q1
+
+    def select_action(self, obs):
+        """ε-greedy usando Q1 + Q2 para explotar."""
+        s = self.discretizer(obs)
+        if np.random.rand() < self.eps:
+            a = np.random.randint(self.n_actions)
+        else:
+            q_sum = self.Q1[s] + self.Q2[s]
+            a = int(np.argmax(q_sum))
+        return a, s
+
+    def update(self, s, a, r, s2, done: bool):
+        """Actualiza una de las dos tablas al azar (Double Q-Learning)."""
+        if np.random.rand() < 0.5:
+            # Actualizar Q1 usando argmax en Q1 y valor de Q2
+            q = self.Q1
+            q_next_sel = self.Q1
+            q_next_val = self.Q2
+        else:
+            # Actualizar Q2 usando argmax en Q2 y valor de Q1
+            q = self.Q2
+            q_next_sel = self.Q2
+            q_next_val = self.Q1
+
+        if done:
+            target = r
+        else:
+            a_star = int(np.argmax(q_next_sel[s2]))
+            target = r + self.gamma * q_next_val[s2][a_star]
+
+        q[s][a] += self.alpha * (target - q[s][a])
+
+    def decay_epsilon(self):
+        self.eps = max(self.eps_end, self.eps * self.eps_decay)

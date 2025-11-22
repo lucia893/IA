@@ -1,4 +1,5 @@
 from __future__ import annotations
+from src.agents import QLearningAgent, StochasticQLearningAgent, DoubleQLearningAgent
 import time
 import numpy as np
 import wandb
@@ -10,7 +11,7 @@ from src.discretizers import (
     DiscretizerDataDriven,
     learn_data_driven_cuts,
 )
-from src.agents import QLearningAgent, StochasticQLearningAgent
+from src.agents import DoubleQLearningAgent, QLearningAgent, StochasticQLearningAgent
 from src.train import train
 from src.evaluate import evaluate
 
@@ -54,6 +55,12 @@ def build_agent_from_cfg(cfg, env, discretizer):
             k_subset=cfg.k_subset,
             **common_kwargs,
         )
+    elif cfg.agent == "double":
+        return DoubleQLearningAgent(
+            n_actions=env.action_space.n,
+            discretizer=discretizer,
+            **common_kwargs,
+    )
     else:
         raise ValueError("agent debe ser 'ql' o 'sql'")
 

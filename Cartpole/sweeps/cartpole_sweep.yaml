@@ -7,7 +7,7 @@ metric:
 
 parameters:
   agent:
-    values: ["ql"] # si después querés probar "sql", lo agregás acá
+    values: ["ql", "sql", "double"] # si después querés probar "sql", lo agregás acá
 
   disc:
     values: ["uniform", "heur", "data"]
