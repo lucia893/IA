@@ -19,7 +19,7 @@ def moving_avg(x: Iterable[float], w: int = 50) -> np.ndarray:
 
 def train(agent,
           env,
-          episodes: int = 800,
+          episodes: int = 100,
           seed: int = 42,
           render: bool = False,
           wandb_run=None) -> Dict[str, np.ndarray]:
@@ -69,7 +69,7 @@ class GSConfig:
     eps_end: float
     eps_decay: float
     k_subset: int = 1      # solo aplica si agent_name == 'sql'
-    episodes: int = 800
+    episodes: int = 100
     seed: int = 42
     runs: int = 1          # cuántas repeticiones por config
 

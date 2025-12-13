@@ -78,7 +78,7 @@ def main():
             "eps_end": 0.02,
             "eps_decay": 0.995,
             "k_subset": 1,
-            "episodes": 800,
+            "episodes": 100,
             "seed": 42,
             "disc_data_episodes": 50,
         },
