@@ -1,0 +1,3 @@
+{
+  "python.analysis.extraPaths": ["./2048/src"]
+}

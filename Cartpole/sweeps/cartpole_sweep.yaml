@@ -1,5 +1,5 @@
 program: run_with_poetry.py
-method: grid
+method: random
 
 metric:
   name: eval_mean
