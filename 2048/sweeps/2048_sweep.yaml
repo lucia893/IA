@@ -1,0 +1,38 @@
+program: src/main.py
+method: random
+metric:
+  name: eval_reward_mean # métrica que logueás en main.py
+  goal: maximize
+
+parameters:
+  agent:
+    values: ["expectimax", "minimax"]
+
+  depth:
+    values: [2, 3, 4, 5, 6, 7]
+
+  empty_weight:
+    values: [10000.0, 20000.0, 30000.0]
+
+  smooth_weight:
+    values: [0.5, 1.0, 2.0]
+
+  max_tile_weight:
+    values: [0.2, 0.5, 1.0]
+
+  mono_weight:
+    values: [1.0, 5.0, 10.0]
+
+  corner_weight:
+    values: [10.0, 50.0, 100.0]
+
+  value_weight:
+    values: [0.00005, 0.0001, 0.0002]
+
+  # cosas que no queremos que el sweep cambie:
+  episodes:
+    value: 50
+  eval_episodes:
+    value: 30
+  seed:
+    value: 42

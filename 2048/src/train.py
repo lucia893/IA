@@ -2,7 +2,7 @@ from __future__ import annotations
 import numpy as np
 from typing import Dict
 from GameBoard import GameBoard
-from Agent import Agent
+from agent import Agent
 
 TARGET_TILE = 2048
 

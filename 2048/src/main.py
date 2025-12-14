@@ -59,7 +59,6 @@ def main():
     out = train(agent, episodes=cfg.episodes, seed=cfg.seed, wandb_run=run)
     dt = (datetime.now() - start).total_seconds()
 
-    # evaluación estilo CartPole
     eval_stats = evaluate(agent, episodes=cfg.eval_episodes, seed=cfg.seed + 1234)
 
     wandb.log({
@@ -67,7 +66,6 @@ def main():
         "final_max_tile": int(out["max_tiles"][-1]),
         "train_win_rate": float(out["wins"].mean()),
         "train_time_s": dt,
-        # evaluación
         **eval_stats
     })
 
