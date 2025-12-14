@@ -2,7 +2,7 @@ program: run_with_poetry.py
 method: grid
 
 metric:
-  name: final_ma50
+  name: eval_mean
   goal: maximize
 
 parameters:
@@ -13,10 +13,10 @@ parameters:
     values: ["uniform", "heur", "data"]
 
   alpha:
-    values: [0.05, 0.1]
+    values: [0.05, 0.1, 0.2, 0.3]
 
   gamma:
-    values: [0.98, 0.99]
+    values: [0.95, 0.97, 0.99]
 
   eps_start:
     value: 1.0
@@ -31,10 +31,10 @@ parameters:
     value: 1
 
   episodes:
-    value: 100
+    value: 10000
 
   seed:
     value: 42
 
   disc_data_episodes:
-    value: 50
+    value: 500
