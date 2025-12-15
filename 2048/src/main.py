@@ -1,5 +1,4 @@
 import wandb
-import pickle 
 from datetime import datetime
 from ExpectiMaxAgent import ExpectimaxAgent
 from MiniMaxAgent import MinimaxAgent
@@ -8,45 +7,29 @@ from train import train
 from evaluate import evaluate
 
 
-
 def build_agent_from_cfg(cfg):
-    agent_name = str(cfg.get("agent", "")).strip().lower()
-
-    if agent_name == "expectimax":
+    if cfg.agent == "expectimax":
         return ExpectimaxAgent(
-            depth=int(cfg.get("depth", 4)),
-            empty_weight=float(cfg.get("empty_weight", 30000.0)),
-            smooth_weight=float(cfg.get("smooth_weight", 1.0)),
-            max_tile_weight=float(cfg.get("max_tile_weight", 0.5)),
-            mono_weight=float(cfg.get("mono_weight", 5.0)),
-            corner_weight=float(cfg.get("corner_weight", 50.0)),
-            value_weight=float(cfg.get("value_weight", 0.0001)),
-            p_two=float(cfg.get("p_two", 0.9)),
+            depth=cfg.depth,
+            empty_weight=cfg.empty_weight,
+            smooth_weight=cfg.smooth_weight,
+            max_tile_weight=cfg.max_tile_weight,
+            mono_weight=cfg.mono_weight,
+            corner_weight=cfg.corner_weight,
+            value_weight=cfg.value_weight,
+            p_two=cfg.p_two,
         )
-
-    if agent_name == "minimax":
+    elif cfg.agent == "minimax":
         return MinimaxAgent(
-            depth=int(cfg.get("depth", 4)),
-            empty_weight=float(cfg.get("empty_weight", 30000.0)),
-            smooth_weight=float(cfg.get("smooth_weight", 1.0)),
-            max_tile_weight=float(cfg.get("max_tile_weight", 0.5)),
-            mono_weight=float(cfg.get("mono_weight", 5.0)),
-            corner_weight=float(cfg.get("corner_weight", 50.0)),
-            value_weight=float(cfg.get("value_weight", 0.0001)),
+            depth=cfg.depth,
+            empty_weight=cfg.empty_weight,
+            smooth_weight=cfg.smooth_weight,
+            max_tile_weight=cfg.max_tile_weight,
+            mono_weight=cfg.mono_weight,
+            corner_weight=cfg.corner_weight,
         )
-
-    if agent_name in ("minimax_noab", "minimax_no_ab", "minimax_noalpha", "minimaxnoab"):
-        return MinimaxNoABAgent(
-            depth=int(cfg.get("depth", 3)),
-            empty_weight=float(cfg.get("empty_weight", 30000.0)),
-            smooth_weight=float(cfg.get("smooth_weight", 1.0)),
-            max_tile_weight=float(cfg.get("max_tile_weight", 0.5)),
-            mono_weight=float(cfg.get("mono_weight", 5.0)),
-            corner_weight=float(cfg.get("corner_weight", 50.0)),
-            value_weight=float(cfg.get("value_weight", 0.0001)),
-        )
-
-    raise ValueError(f"Agente no válido: {cfg.get('agent')}")
+    else:
+        raise ValueError("Agente no válido")
 
 
 def main():
@@ -63,9 +46,9 @@ def main():
             "corner_weight": 50.0,
             "value_weight": 0.0001,
             "p_two": 0.9,
-            "episodes": 20,      
+            "episodes": 50,
             "seed": 42,
-            "eval_episodes": 0,
+            "eval_episodes": 30,
         }
     )
     cfg = wandb.config
@@ -85,23 +68,6 @@ def main():
         "train_time_s": dt,
         **eval_stats
     })
-
-    results = {
-        "config": dict(cfg),         
-        "train_out": {
-            "rewards": out["rewards"],
-            "max_tiles": out["max_tiles"],
-            "wins": out["wins"],
-        },
-        "eval_stats": eval_stats,
-        "train_time_s": dt,
-    }
-
-    filename = "expectimax_depth4_results.pkl"
-    with open(filename, "wb") as f:
-        pickle.dump(results, f)
-
-    print(f"\nArchivo {filename} guardado correctamente.")
 
     run.finish()
 
