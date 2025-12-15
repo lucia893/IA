@@ -1,4 +1,3 @@
-# src/mbd/train.py
 from __future__ import annotations
 import time, csv, itertools
 from collections import deque
@@ -23,10 +22,7 @@ def train(agent,
           seed: int = 42,
           render: bool = False,
           wandb_run=None) -> Dict[str, np.ndarray]:
-    """
-    Entrena un agente tabular (QL o StochQL) en el env dado.
-    Devuelve dict con recompensas por episodio y media móvil.
-    """
+    
     rewards = []
     for ep in range(episodes):
         obs, _ = env.reset(seed=seed + ep)
@@ -43,9 +39,8 @@ def train(agent,
         agent.decay_epsilon()
         rewards.append(total)
 
-        # 👇 logging episodio a episodio
         if wandb_run is not None:
-            ma50 = float(np.mean(rewards[-50:]))  # media móvil sobre los últimos 50
+            ma50 = float(np.mean(rewards[-50:]))  
             wandb_run.log({
                 "episode": ep,
                 "reward": total,
@@ -61,17 +56,17 @@ def train(agent,
 
 @dataclass
 class GSConfig:
-    agent_name: str        # 'ql' o 'sql'
-    disc_name: str         # 'uniform' o 'heur'
+    agent_name: str        
+    disc_name: str         
     alpha: float
     gamma: float
     eps_start: float
     eps_end: float
     eps_decay: float
-    k_subset: int = 1      # solo aplica si agent_name == 'sql'
+    k_subset: int = 1      
     episodes: int = 100
     seed: int = 42
-    runs: int = 1          # cuántas repeticiones por config
+    runs: int = 1         
 
 @dataclass
 class GSResult:
@@ -98,15 +93,7 @@ def grid_search(env_factory: Callable[[], Any],
                 param_grid: Dict[str, Iterable],
                 base: GSConfig,
                 csv_out: str | None = None) -> list[GSResult]:
-    """
-    Barrido simple de hiperparámetros.
-    - env_factory(): retorna un env listo (llamar uno por corrida).
-    - agent_factory(...): construye el agente con params (ver main.py helpers).
-    - evaluate_fn(agent, env, episodes, seed): eval greedy -> (mean, std, arr)
-    - param_grid: dict con iterables de valores a combinar.
-    - base: valores base (GSConfig) que se pisan con las combinaciones.
-    - csv_out: si se pasa, guarda resultados línea a línea.
-    """
+
     keys = list(param_grid.keys())
     combos = list(itertools.product(*[param_grid[k] for k in keys]))
 

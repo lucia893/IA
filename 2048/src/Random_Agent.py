@@ -1,9 +1,9 @@
-from Agent import Agent
+from agent import agent
 from GameBoard import GameBoard
 import numpy as np
 
 
-class RandomAgent(Agent):
+class RandomAgent(agent):
   def init(self):
     pass
 

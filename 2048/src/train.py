@@ -2,8 +2,7 @@ from __future__ import annotations
 import numpy as np
 from typing import Dict
 from GameBoard import GameBoard
-from agent import Agent
-
+from agent import agent
 TARGET_TILE = 2048
 
 
@@ -11,15 +10,8 @@ def check_win(board: GameBoard) -> bool:
     return board.get_max_tile() >= TARGET_TILE
 
 
-def play_one_game(agent: Agent, seed: int | None = None) -> Dict[str, float]:
-    """
-    Juega una partida completa de 2048.
-    Devuelve métricas coherentes:
-        - reward: suma total de fichas (score)
-        - max_tile
-        - moves
-        - win (1 si >= 2048, sino 0)
-    """
+def play_one_game(agent: agent, seed: int | None = None) -> Dict[str, float]:
+    
     if seed is not None:
         np.random.seed(seed)
 
@@ -53,7 +45,7 @@ def moving_avg(arr, w=50):
     return out
 
 
-def train(agent: Agent,
+def train(agent: agent,
           episodes: int = 50,
           seed: int = 42,
           wandb_run=None):
@@ -74,7 +66,7 @@ def train(agent: Agent,
             wandb_run.log({
                 "episode": ep,
                 "reward": rewards[-1],
-                "ma50_reward": ma50,          # igual que MA50 en CartPole
+                "ma50_reward": ma50,          
                 "max_tile": max_tiles[-1],
                 "moves": moves_list[-1],
                 "win": wins[-1],

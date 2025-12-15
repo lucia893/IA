@@ -1,35 +1,50 @@
 import wandb
 from datetime import datetime
-
 from ExpectiMaxAgent import ExpectimaxAgent
 from MiniMaxAgent import MinimaxAgent
+from MiniMaxSinABAgent import MinimaxNoABAgent 
 from train import train
 from evaluate import evaluate
 
 
 def build_agent_from_cfg(cfg):
-    if cfg.agent == "expectimax":
+    agent_name = str(cfg.get("agent", "")).strip().lower()
+
+    if agent_name == "expectimax":
         return ExpectimaxAgent(
-            depth=cfg.depth,
-            empty_weight=cfg.empty_weight,
-            smooth_weight=cfg.smooth_weight,
-            max_tile_weight=cfg.max_tile_weight,
-            mono_weight=cfg.mono_weight,
-            corner_weight=cfg.corner_weight,
-            value_weight=cfg.value_weight,
-            p_two=cfg.p_two,
+            depth=int(cfg.get("depth", 4)),
+            empty_weight=float(cfg.get("empty_weight", 30000.0)),
+            smooth_weight=float(cfg.get("smooth_weight", 1.0)),
+            max_tile_weight=float(cfg.get("max_tile_weight", 0.5)),
+            mono_weight=float(cfg.get("mono_weight", 5.0)),
+            corner_weight=float(cfg.get("corner_weight", 50.0)),
+            value_weight=float(cfg.get("value_weight", 0.0001)),
+            p_two=float(cfg.get("p_two", 0.9)),
         )
-    elif cfg.agent == "minimax":
+
+    if agent_name == "minimax":
         return MinimaxAgent(
-            depth=cfg.depth,
-            empty_weight=cfg.empty_weight,
-            smooth_weight=cfg.smooth_weight,
-            max_tile_weight=cfg.max_tile_weight,
-            mono_weight=cfg.mono_weight,
-            corner_weight=cfg.corner_weight,
+            depth=int(cfg.get("depth", 4)),
+            empty_weight=float(cfg.get("empty_weight", 30000.0)),
+            smooth_weight=float(cfg.get("smooth_weight", 1.0)),
+            max_tile_weight=float(cfg.get("max_tile_weight", 0.5)),
+            mono_weight=float(cfg.get("mono_weight", 5.0)),
+            corner_weight=float(cfg.get("corner_weight", 50.0)),
+            value_weight=float(cfg.get("value_weight", 0.0001)),
         )
-    else:
-        raise ValueError("Agente no válido")
+
+    if agent_name in ("minimax_noab", "minimax_no_ab", "minimax_noalpha", "minimaxnoab"):
+        return MinimaxNoABAgent(
+            depth=int(cfg.get("depth", 3)),
+            empty_weight=float(cfg.get("empty_weight", 30000.0)),
+            smooth_weight=float(cfg.get("smooth_weight", 1.0)),
+            max_tile_weight=float(cfg.get("max_tile_weight", 0.5)),
+            mono_weight=float(cfg.get("mono_weight", 5.0)),
+            corner_weight=float(cfg.get("corner_weight", 50.0)),
+            value_weight=float(cfg.get("value_weight", 0.0001)),
+        )
+
+    raise ValueError(f"Agente no válido: {cfg.get('agent')}")
 
 
 def main():

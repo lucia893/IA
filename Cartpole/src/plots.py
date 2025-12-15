@@ -22,9 +22,7 @@ def plot_compare_curves(series: list[tuple[np.ndarray, np.ndarray, str]],
                         title: str = "Comparación de curvas",
                         xlabel: str = "Episodio",
                         ylabel: str = "Recompensa"):
-    """
-    series: lista de (rewards, moving_avg, etiqueta)
-    """
+    
     plt.figure()
     for rewards, moving, label in series:
         if moving is not None and len(moving) == len(rewards):

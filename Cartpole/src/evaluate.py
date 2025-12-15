@@ -1,4 +1,3 @@
-# src/mbd/evaluate.py
 from __future__ import annotations
 import numpy as np
 
@@ -7,11 +6,7 @@ def evaluate(agent,
              episodes: int = 20,
              seed: int = 999,
              greedy: bool = True) -> tuple[float, float, np.ndarray]:
-    """
-    Evalúa el agente en 'episodes' episodios.
-    Si greedy=True fuerza eps=0 (sin exploración).
-    Retorna (mean, std, scores).
-    """
+    
     eps_backup = agent.eps
     if greedy:
         agent.eps = 0.0
@@ -38,11 +33,7 @@ def evaluate_with_success(agent,
                           episodes: int = 50,
                           seed: int = 2025,
                           success_threshold: float = 500.0) -> dict:
-    """
-    Evalúa greedy y reporta:
-      - mean, std, scores
-      - success_rate: % de episodios con score >= threshold (500 pasos por defecto)
-    """
+   
     mu, sd, scores = evaluate(agent, env, episodes=episodes, seed=seed, greedy=True)
     success = float(np.mean(scores >= success_threshold))
     return {

@@ -27,7 +27,6 @@ def build_discretizer(name: str, env=None):
     elif name == "data":
         if env is None:
             raise ValueError("Para 'data' se necesita pasar el env a build_discretizer.")
-        # mismos bins que el uniforme, pero cortes aprendidos de datos reales
         cuts = learn_data_driven_cuts(
             env,
             bins_per_feature=(6, 6, 12, 12),
@@ -62,7 +61,6 @@ def build_agent(name: str, n_actions: int, discretizer, args):
 def main():
     parser = argparse.ArgumentParser(description="CartPole Q-Learning / Stochastic Q-Learning")
 
-    # modos
     parser.add_argument("--mode", choices=["train", "eval"], required=True)
     parser.add_argument("--agent", choices=["ql", "sql"], default="ql")
     parser.add_argument("--disc", choices=["uniform", "heur", "data"], default="uniform")
@@ -74,7 +72,6 @@ def main():
 )
 
 
-    # hiperparámetros
     parser.add_argument("--episodes", type=int, default=800)
     parser.add_argument("--alpha", type=float, default=0.1)
     parser.add_argument("--gamma", type=float, default=0.99)
@@ -83,7 +80,6 @@ def main():
     parser.add_argument("--eps-decay", type=float, default=0.995)
     parser.add_argument("--k-subset", type=int, default=1, help="solo para SQL")
 
-    # otros parámetros
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--render", action="store_true", help="muestra ventana del CartPole")
     parser.add_argument("--model-out", type=str, default="models/model.pkl")
@@ -91,20 +87,17 @@ def main():
 
     args = parser.parse_args()
 
-    # crear entorno y discretizador
     env = make_env("CartPole-v1", seed=args.seed, render=args.render)
     discretizer = build_discretizer(args.disc, env)
     agent = build_agent(args.agent, env.action_space.n, discretizer, args)
 
 
-    # modo entrenamiento
     if args.mode == "train":
         print(f"\nEntrenando [{args.agent.upper()}] con discretizador [{args.disc}] ...")
         start_time = time.time()
 
-        # 🔹 Inicializar run en W&B
         run = wandb.init(
-            project="cartpole-ql",  # nombre del proyecto en W&B (poné el que quieras)
+            project="cartpole-ql",  
             config={
                 "agent": args.agent,
                 "disc": args.disc,
@@ -126,7 +119,7 @@ def main():
             episodes=args.episodes,
             seed=args.seed,
             render=args.render,
-            wandb_run=run,   # ⬅️ le pasamos el run
+            wandb_run=run,  
         )
         elapsed = time.time() - start_time
 
@@ -137,14 +130,12 @@ def main():
         print(f"Última recompensa: {rewards[-1]:.1f}")
         print(f"Media móvil final (50 eps): {ma[-1]:.1f}")
 
-        # Loguear métricas finales a W&B
         wandb.log({
             "final_reward": float(rewards[-1]),
             "final_ma50": float(ma[-1]),
             "train_time_s": elapsed,
         })
 
-        # crear carpeta models si no existe
         os.makedirs("models", exist_ok=True)
 
         payload = {
@@ -164,7 +155,6 @@ def main():
         mu, sd, _ = evaluate(agent, env, episodes=20, seed=args.seed + 1234)
         print(f"\nEvaluación greedy: mean={mu:.1f} ± {sd:.1f}")
 
-        # también lo mandamos a W&B
         wandb.log({
             "eval_mean": mu,
             "eval_std": sd,
@@ -173,13 +163,11 @@ def main():
         run.finish()
 
 
-    # modo evaluación
     elif args.mode == "eval":
         print(f"\nEvaluando modelo: {args.model_in}")
         with open(args.model_in, "rb") as f:
             data = pickle.load(f)
 
-        # reconstruir agente y su Q-table
         agent_loaded = build_agent(
             data.get("agent", "ql"), env.action_space.n, discretizer, args
         )
@@ -191,19 +179,18 @@ def main():
         print(f"\nEvaluación greedy: mean={mu:.1f} ± {sd:.1f}")
         print("Scores individuales:", scores)
 
-        # render opcional durante eval
         if args.render:
             print("\nReproduciendo episodio renderizado (greedy)...")
             obs, _ = env.reset(seed=args.seed)
             done = False
-            agent_loaded.eps = 0.0  # modo greedy
+            agent_loaded.eps = 0.0  
             import time as t
             while not done:
                 env.render()
                 a, _ = agent_loaded.select_action(obs)
                 obs, _, terminated, truncated, _ = env.step(a)
                 done = terminated or truncated
-                t.sleep(0.01)  # pequeña pausa para ver la animación
+                t.sleep(0.01)  
             env.close()
 
 

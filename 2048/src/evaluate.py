@@ -1,4 +1,3 @@
-# evaluate_2048.py
 from __future__ import annotations
 import numpy as np
 from train import play_one_game

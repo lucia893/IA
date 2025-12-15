@@ -12,7 +12,7 @@ import numpy as np
 # Posibility of adding a 4 tile 10%
 
 
-class Agent(ABC):
+class agent(ABC):
 
     @abstractmethod
     def play(self, board: GameBoard)->int:
