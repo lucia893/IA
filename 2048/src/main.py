@@ -1,10 +1,12 @@
 import wandb
+import pickle 
 from datetime import datetime
 from ExpectiMaxAgent import ExpectimaxAgent
 from MiniMaxAgent import MinimaxAgent
 from MiniMaxSinABAgent import MinimaxNoABAgent 
 from train import train
 from evaluate import evaluate
+
 
 
 def build_agent_from_cfg(cfg):
@@ -61,9 +63,9 @@ def main():
             "corner_weight": 50.0,
             "value_weight": 0.0001,
             "p_two": 0.9,
-            "episodes": 50,
+            "episodes": 20,      
             "seed": 42,
-            "eval_episodes": 30,
+            "eval_episodes": 0,
         }
     )
     cfg = wandb.config
@@ -83,6 +85,23 @@ def main():
         "train_time_s": dt,
         **eval_stats
     })
+
+    results = {
+        "config": dict(cfg),         
+        "train_out": {
+            "rewards": out["rewards"],
+            "max_tiles": out["max_tiles"],
+            "wins": out["wins"],
+        },
+        "eval_stats": eval_stats,
+        "train_time_s": dt,
+    }
+
+    filename = "expectimax_depth4_results.pkl"
+    with open(filename, "wb") as f:
+        pickle.dump(results, f)
+
+    print(f"\nArchivo {filename} guardado correctamente.")
 
     run.finish()
 

@@ -27,7 +27,7 @@ def justify_left(a, out):
 
 class GameBoard:
     def __init__(self):
-        self.grid = np.zeros((4, 4))  # , dtype=np.int_)
+        self.grid = np.zeros((4, 4))  
         self.__add_random_tile()
         self.__add_random_tile()
 
@@ -70,8 +70,8 @@ class GameBoard:
         if get_avail_call:
             clone = self.clone()
 
-        z1 = np.zeros((4, 4))  # , dtype=np.int_)
-        z2 = np.zeros((4, 4))  # , dtype=np.int_)
+        z1 = np.zeros((4, 4))  
+        z2 = np.zeros((4, 4))  
 
         if dir == UP:
             self.grid = self.grid[:, ::-1].T
@@ -104,15 +104,6 @@ class GameBoard:
             return None
 
     def get_available_moves(self)->list[int]:
-        """
-        Devuelve cuales movimientos se pueden hacer con el estado actual\n
-        Por ejemplo :\n
-            \t0   0   0   2\n
-            \t0   0   0   4\n
-            \t0   0   0   2\n
-            \t0   0   0   4\n
-            \tDevuelve solo izquierda\n
-        """
         available_moves = []
 
         for x in dirs:
@@ -123,12 +114,6 @@ class GameBoard:
         return available_moves
 
     def play(self, dir:int):
-        """
-        Mueve el tablero en la posicion indicada, y agrega una ficha en una posicion al azar\n
-        La posibilidad de que la ficha sea un:\n
-            \t2 - 90%\n
-            \t4 - 10%\n
-        """
         self.move(dir)
         self.__add_random_tile()
         return len(self.get_available_moves()) == 0
